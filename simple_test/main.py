@@ -10,16 +10,16 @@ def main():
         root="../data",
         train=True,
         download=True,
-        transform=ToTensor(), ), batch_size=2048)
+        transform=ToTensor(), ), batch_size=13684)
 
     test_data = DataLoader(datasets.FashionMNIST(
         root="../data",
         train=True,
         download=True,
-        transform=ToTensor(), ), batch_size=2048)
+        transform=ToTensor(), ), batch_size=13684)
 
-    print("Files loaded! (Fashion MNIST)")
-    train = trainer.Trainer(model.Model(), train_data, test_data, max_epochs=15, checkpoint_at=5)
+    print("Files loaded! (Fashion MNIST)", flush=True)
+    train = trainer.Trainer(model.Model(), train_data, test_data, max_epochs=20, checkpoint_at=5)
 
     train.train()
 

@@ -13,7 +13,7 @@ class Trainer:
         self.model = model.to('cuda')
 
         if optimiser is None:
-            optimiser = optim.SGD(model.parameters(), lr=5e-2, momentum=0.9)
+            optimiser = optim.SGD(model.parameters(), lr=1e-2, momentum=0.9)
 
         self.optimiser = optimiser
         self.max_epochs = max_epochs
@@ -61,7 +61,7 @@ class Trainer:
                 correct += (pred.argmax(1) == y).type(torch.float).sum().item()
         test_loss /= num_batches
         correct /= size
-        print(f"Epoch {self.epochs + 1} | Accuracy: {(100 * correct):>0.1f}%, Avg loss: {test_loss:>0.3f}")
+        print(f"Epoch {self.epochs + 1} | Accuracy: {(100 * correct):>0.1f}%, Avg loss: {test_loss:>0.3f}", flush=True)
 
     def train(self):
         for ep in range(self.max_epochs):
