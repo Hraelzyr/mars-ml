@@ -7,13 +7,13 @@ import model
 
 def main():
     train_data = DataLoader(datasets.FashionMNIST(
-        root="../data",
+        root="/dev/shm/data",
         train=True,
         download=True,
         transform=ToTensor(), ), batch_size=500)
 
     test_data = DataLoader(datasets.FashionMNIST(
-        root="../data",
+        root="/dev/shm/data",
         train=True,
         download=True,
         transform=ToTensor(), ), batch_size=10000)

@@ -13,5 +13,6 @@
 ml cuda
 
 #nvidia-smi
-
+cp -r ../data /dev/shm/$J
 python3 main.py
+rm -r /dev/shm/$J
