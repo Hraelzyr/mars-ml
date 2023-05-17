@@ -1,12 +1,12 @@
 #!/bin/bash
 
 #SBATCH --nodes=1
-#SBATCH --job-name=test
+#SBATCH --job-name=simple_ml_model
 ##SBATCH --cpus-per-task=cpu
-#SBATCH --gpus-per-task=1
+#SBATCH --gpus-per-task=2
 #SBATCH --time=0-00:10:00
 #SBATCH --partition=debug
-##SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:2
 #SBATCH --error=file.err
 #SBATCH --output=file.out
 

@@ -12,7 +12,7 @@ class Trainer:
                  optimiser: optim.Optimizer = None, max_epochs: int = 1,
                  loss_fn=neural.CrossEntropyLoss(), checkpoint_at: int = 1):
 
-        self.model = model.to('cuda')
+        self.model = model
 
         if optimiser is None:
             optimiser = optim.Adam(model.parameters())
@@ -27,6 +27,9 @@ class Trainer:
 
         if os.path.isfile("simple.mlsv"):
             self._load()
+
+        self.in_device = self.model._arch.devices[0]
+        self.out_device = self.model._arch.devices[-1]
 
     def _save(self):
         state = {'model': self.model.state_dict(), 'epochs_run': self.epochs}
@@ -48,8 +51,8 @@ class Trainer:
     def _train_epoch(self):
         # self.train_data.sampler.set_epoch(epoch)
         for data, labels in self.train_data:
-            data = data.to('cuda')
-            labels = labels.to('cuda')
+            data = data.to(self.in_device)
+            labels = labels.to(self.out_device)
             self._train_batch(data, labels)
             # print("One more batch done")
 
@@ -60,7 +63,7 @@ class Trainer:
         test_loss, correct = 0, 0
         with torch.no_grad():
             for X, y in self.test_data:
-                X, y = X.to('cuda'), y.to('cuda')
+                X, y = X.to(self.in_device), y.to(self.out_device)
                 pred = self.model(X)
                 test_loss += self.loss_fn(pred, y).item()
                 correct += (pred.argmax(1) == y).type(torch.float).sum().item()
