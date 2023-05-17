@@ -1,3 +1,5 @@
+import os.path
+
 import torch.optim as optim
 import torch.nn as neural
 import torch.utils.data
@@ -13,7 +15,7 @@ class Trainer:
         self.model = model.to('cuda')
 
         if optimiser is None:
-            optimiser = optim.SGD(model.parameters(), lr=1e-2, momentum=0.9)
+            optimiser = optim.Adam(model.parameters())
 
         self.optimiser = optimiser
         self.max_epochs = max_epochs
@@ -23,6 +25,9 @@ class Trainer:
         self.loss_fn = loss_fn
         self.checkpoint_every = checkpoint_at
 
+        if os.path.isfile("simple.mlsv"):
+            self._load()
+
     def _save(self):
         state = {'model': self.model.state_dict(), 'epochs_run': self.epochs}
         torch.save(state, "simple.mlsv")
@@ -30,7 +35,7 @@ class Trainer:
 
     def _load(self):
         save = torch.load("simple.mlsv")
-        self.model = save['model']
+        self.model.load_state_dict(save['model'])
         self.epochs = save['epochs_run']
 
     def _train_batch(self, data, labels):
@@ -64,7 +69,8 @@ class Trainer:
         print(f"Epoch {self.epochs + 1} | Accuracy: {(100 * correct):>0.1f}%, Avg loss: {test_loss:>0.3f}", flush=True)
 
     def train(self):
-        for ep in range(self.max_epochs):
+        resume: int = self.epochs
+        for ep in range(resume, self.max_epochs):
             self.epochs = ep
             self._train_epoch()
             self._test()
