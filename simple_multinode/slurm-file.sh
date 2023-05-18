@@ -1,13 +1,13 @@
 #!/bin/bash
 
-#SBATCH --nodes=4
-#SBATCH --ntasks=8
+#SBATCH --nodes=2
+#SBATCH --gpus=4
 #SBATCH --job-name=multinode-ml
 #SBATCH --cpus-per-task=4
 #SBATCH --gpus-per-task=2
 ##SBATCH --time=0-00:10:00
 ##SBATCH --partition=debug
-#SBATCH --gres=gpu:2
+##SBATCH --gres=gpu:2
 #SBATCH --error=file.err
 #SBATCH --output=file.out
 
@@ -22,7 +22,7 @@ head_node_ip=$(srun --nodes=1 --ntasks=1 -w "$head_node" hostname --ip-address)
 
 echo Node IP: $head_node_ip
 srun torchrun \
---nnodes 4 \
+--nnodes 2 \
 --nproc_per_node 2 \
 --rdzv_id $RANDOM \
 --rdzv_backend c10d \
