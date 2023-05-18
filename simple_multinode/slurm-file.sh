@@ -13,6 +13,6 @@
 ml cuda
 
 #nvidia-smi
-cp -r ../data /dev/shm/$J
-torchrun --standalone --nproc_per_node=gpu main.py
-rm -r /dev/shm/$J
+cp -r ../data /dev/shm/simple-$J
+srun torchrun --standalone --nproc_per_node=gpu main.py
+rm -r /dev/shm/simple-$J

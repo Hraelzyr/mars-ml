@@ -8,7 +8,7 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 
 class Trainer:
     def __init__(self,
-                 model: neural.Module, train_data: torch.utils.data.DataLoader,
+                 model, train_data: torch.utils.data.DataLoader,
                  test_data: torch.utils.data.DataLoader,
                  optimiser: optim.Optimizer = None, max_epochs: int = 1,
                  loss_fn=neural.CrossEntropyLoss(), checkpoint_at: int = 1):
