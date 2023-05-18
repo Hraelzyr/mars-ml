@@ -6,7 +6,9 @@ class Model(neural.Module):
         super(Model, self).__init__()
         self.flatten = neural.Flatten()
         self._arch = neural.Sequential(neural.Linear(28*28, 128), neural.ReLU(),
+                                       neural.Dropout(),
                                        neural.Linear(128, 128), neural.ReLU(),
+                                       neural.Dropout(0.5),
                                        neural.Linear(128, 10), neural.ReLU())
 
     def forward(self, inp):

@@ -17,7 +17,7 @@ def main():
         download=True,
         transform=ToTensor(), )
     train_data = DataLoader(train_data,
-                            batch_size=500,
+                            batch_size=1000,
                             sampler=DistributedSampler(train_data))
 
     test_data = datasets.FashionMNIST(
