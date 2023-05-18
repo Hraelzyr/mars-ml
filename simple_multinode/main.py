@@ -14,23 +14,23 @@ def main():
     train_data = datasets.FashionMNIST(
         root="/dev/shm/data",
         train=True,
-        download=True,
+        download=False,
         transform=ToTensor(), )
     train_data = DataLoader(train_data,
-                            batch_size=1000,
+                            batch_size=125,
                             sampler=DistributedSampler(train_data))
 
     test_data = datasets.FashionMNIST(
         root="/dev/shm/data",
         train=False,
-        download=True,
+        download=False,
         transform=ToTensor(), )
     test_data = DataLoader(test_data,
-                           batch_size=10000,
+                           batch_size=1000,
                            sampler=DistributedSampler(test_data))
 
     print("Files loaded! (Fashion MNIST)", flush=True)
-    train = trainer.Trainer(model.Model(), train_data, test_data, max_epochs=200, checkpoint_at=10)
+    train = trainer.Trainer(model.Model(), train_data, test_data, max_epochs=20, checkpoint_at=5)
 
     torch.cuda.set_device(int(os.environ["LOCAL_RANK"]))
     train.train()
