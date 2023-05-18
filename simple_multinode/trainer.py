@@ -13,8 +13,8 @@ class Trainer:
                  optimiser: optim.Optimizer = None, max_epochs: int = 1,
                  loss_fn=neural.CrossEntropyLoss(), checkpoint_at: int = 1):
 
-        self.device_id=int(os.environ['LOCAL_RANK'])
-        self.process_id=int(os.environ['RANK'])
+        self.device_id = int(os.environ['LOCAL_RANK'])
+        self.process_id = int(os.environ['RANK'])
         self.model = model.to(self.device_id)
 
         if optimiser is None:
@@ -34,7 +34,8 @@ class Trainer:
         self.model = DDP(self.model, device_ids=[self.device_id])
 
     def _save(self):
-        state = {'model': self.model.module.state_dict(), 'epochs_run': self.epochs, 'optim': self.optimiser.state_dict()}
+        state = {'model': self.model.module.state_dict(), 'epochs_run': self.epochs,
+                 'optim': self.optimiser.state_dict()}
         torch.save(state, "simple.mlsv")
         print(f"Saving at Epoch {self.epochs + 1}", flush=True)
 
@@ -72,7 +73,8 @@ class Trainer:
                 correct += (pred.argmax(1) == y).type(torch.float).sum().item()
         test_loss /= num_batches
         correct /= size
-        print(f"Epoch {self.epochs + 1} | Accuracy: {(100 * correct):>0.1f}%, Avg loss: {test_loss:>0.3f}")
+        if self.process_id == 0:
+            print(f"Epoch {self.epochs + 1} | Accuracy: {(100 * correct):>0.1f}%, Avg loss: {test_loss:>0.3f}")
 
     def train(self):
         resume: int = self.epochs
@@ -80,5 +82,5 @@ class Trainer:
             self.epochs = ep
             self._train_epoch()
             self._test()
-            if (ep + 1) % self.checkpoint_every == 0:
+            if (ep + 1) % self.checkpoint_every == 0 and self.process_id == 0:
                 self._save()
