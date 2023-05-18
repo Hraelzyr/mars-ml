@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #SBATCH --nodes=4
+#SBATCH --ntasks=8
 #SBATCH --job-name=multinode-ml
 #SBATCH --cpus-per-task=4
 #SBATCH --gpus-per-task=2
