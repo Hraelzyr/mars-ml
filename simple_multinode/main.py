@@ -10,9 +10,10 @@ from torch.utils.data.distributed import DistributedSampler
 
 
 def main():
+    tmp_loc: str = os.environ['STOR_LOC']+"/data"
     init_process_group(backend='nccl')
     train_data = datasets.FashionMNIST(
-        root="/dev/shm/data",
+        root=tmp_loc,
         train=True,
         download=False,
         transform=ToTensor(), )
@@ -21,7 +22,7 @@ def main():
                             sampler=DistributedSampler(train_data))
 
     test_data = datasets.FashionMNIST(
-        root="/dev/shm/data",
+        root=tmp_loc,
         train=False,
         download=False,
         transform=ToTensor(), )
